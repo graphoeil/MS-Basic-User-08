@@ -1,5 +1,5 @@
 // // Imports
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import Button from "../ui/Button";
 import ErrorModal from "../ui/ErrorModal";
@@ -16,6 +16,12 @@ const AddUser = (props) => {
 		age:''
 	});
 	const [error, setError] = useState();
+
+	// Autofocus name input
+	const inputRef = useRef();
+	useEffect(() => {
+		inputRef.current.focus();
+	},[formData.username]);
 
 	// Inputs change
 	const handleChange = (e) => {
@@ -70,7 +76,7 @@ const AddUser = (props) => {
 			}
 			<Wrapper className="shadowBox" onSubmit={ handleSubmit }>
 				<label htmlFor="username">Username</label>
-				<input type="text" name="username" id="username" value={ formData.username } onChange={ handleChange } />
+				<input ref={ inputRef } type="text" name="username" id="username" value={ formData.username } onChange={ handleChange } />
 				<label htmlFor="age">Age (Years)</label>
 				<input type="number" name="age" id="age" value={ formData.age } onChange={ handleChange } />
 				<Button type="submit">
