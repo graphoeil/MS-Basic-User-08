@@ -1,7 +1,30 @@
 // Imports
 import React from "react";
+import ReactDOM from "react-dom";
 import styled from "styled-components";
 import Button from "./Button";
+
+// Portals, to render out of root
+const Overlay = ({ onCloseModal }) => {
+	return <OverlayWrapper onClick={ onCloseModal }/>;
+};
+const Modal = ({ title, message, onCloseModal }) => {
+	return(
+		<ModalWrapper className="shadowBox">
+			<header>
+				<h2>{ title }</h2>
+			</header>
+			<div>
+				<p>{ message }</p>
+			</div>
+			<footer>
+				<Button onClick={ onCloseModal }>
+					Okay
+				</Button>
+			</footer>
+		</ModalWrapper>
+	);
+};
 
 // Component
 const ErrorModal = ({ title, message, onCloseModal }) => {
@@ -9,20 +32,13 @@ const ErrorModal = ({ title, message, onCloseModal }) => {
 	// Return
 	return(
 		<React.Fragment>
-			<OverlayWrapper onClick={ onCloseModal }/>
-			<ModalWrapper className="shadowBox">
-				<header>
-					<h2>{ title }</h2>
-				</header>
-				<div>
-					<p>{ message }</p>
-				</div>
-				<footer>
-					<Button onClick={ onCloseModal }>
-						Okay
-					</Button>
-				</footer>
-			</ModalWrapper>
+			{
+				ReactDOM.createPortal(<Overlay onCloseModal={ onCloseModal }/>, document.getElementById('overlay-root'))
+			}
+			{
+				ReactDOM.createPortal(<Modal title={ title } message={ message } onCloseModal={ onCloseModal }/>, 
+					document.getElementById('modal-root'))
+			}
 		</React.Fragment>
 	);
 
